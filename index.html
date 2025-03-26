@@ -87,6 +87,17 @@
         const commentBtn = document.getElementById('comment-btn');
         const commentList = document.getElementById('comment-list');
         
+        // Load comments from the Firestore database
+        db.collection('comments').onSnapshot((querySnapshot) => {
+            commentList.innerHTML = '';
+            querySnapshot.forEach((doc) => {
+                const commentItem = document.createElement('li');
+                commentItem.classList.add('comment-item');
+                commentItem.textContent = doc.data().text;
+                commentList.appendChild(commentItem);
+            });
+        });
+        
         // Add an event listener to the comment button
         commentBtn.addEventListener('click', () => {
             const commentText = commentInput.value.trim();
@@ -97,29 +108,12 @@
                 })
                 .then(() => {
                     console.log('Comment added successfully!');
+                    commentInput.value = '';
                 })
                 .catch((error) => {
                     console.error('Error adding comment:', error);
                 });
-
-                // Create a new comment item
-                const commentItem = document.createElement('li');
-                commentItem.classList.add('comment-item');
-                commentItem.textContent = commentText;
-                commentList.appendChild(commentItem);
-                commentInput.value = '';
             }
-        });
-
-        // Load comments from the Firestore database
-        db.collection('comments').onSnapshot((querySnapshot) => {
-            commentList.innerHTML = '';
-            querySnapshot.forEach((doc) => {
-                const commentItem = document.createElement('li');
-                commentItem.classList.add('comment-item');
-                commentItem.textContent = doc.data().text;
-                commentList.appendChild(commentItem);
-            });
         });
     </script>
 </body>
