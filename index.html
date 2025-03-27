@@ -2,10 +2,23 @@
 <html>
 <head>
   <title>Comment Section</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #comments {
+      margin-top: 20px;
+    }
+    .comment {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
   <h1>Comment Section</h1>
-  <form action="/submit-comment" method="post">
+  <form id="comment-form">
     <label for="commenter">Name:</label>
     <input type="text" id="commenter" name="commenter"><br><br>
     <label for="comment">Comment:</label>
@@ -15,50 +28,28 @@
   <div id="comments"></div>
 
   <script>
+    const commentForm = document.getElementById('comment-form');
+    const commentsDiv = document.getElementById('comments');
+    const comments = [];
 
-    const express = require('express');
-const app = express();
-const port = 3000;
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const commenter = document.getElementById('commenter').value;
+      const comment = document.getElementById('comment').value;
 
-// Set up comment storage
-const comments = [];
+      comments.push({ commenter, comment });
+      displayComments();
+    });
 
-// Serve HTML page
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
-
-// Handle comment submission
-app.post('/submit-comment', (req, res) => {
-  const comment = req.body.comment;
-  const commenter = req.body.commenter;
-
-  comments.push({ commenter, comment });
-
-  res.redirect('/');
-});
-
-// Serve comments
-app.get('/comments', (req, res) => {
-  res.json(comments);
-});
-
-app.use(express.urlencoded({ extended: true }));
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
-    
-    fetch('/comments')
-      .then(response => response.json())
-      .then(comments => {
-        const commentsElement = document.getElementById('comments');
-        comments.forEach(comment => {
-          const commentElement = document.createElement('div');
-          commentElement.innerHTML = `<strong>${comment.commenter}:</strong> ${comment.comment}`;
-          commentsElement.appendChild(commentElement);
-        });
+    function displayComments() {
+      commentsDiv.innerHTML = '';
+      comments.forEach((comment, index) => {
+        const commentElement = document.createElement('div');
+        commentElement.classList.add('comment');
+        commentElement.innerHTML = `<strong>${comment.commenter}:</strong> ${comment.comment}`;
+        commentsDiv.appendChild(commentElement);
       });
+    }
   </script>
 </body>
 </html>
