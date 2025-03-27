@@ -23,7 +23,7 @@
     <input type="text" id="commenter" name="commenter"><br><br>
     <label for="comment">Comment:</label>
     <textarea id="comment" name="comment"></textarea><br><br>
-    <input type="submit" value="Submit Comment">
+    <input type="button" value="Submit Comment" onclick="submitComment()">
   </form>
   <div id="comments"></div>
 
@@ -32,14 +32,13 @@
     const commentsDiv = document.getElementById('comments');
     const comments = [];
 
-    commentForm.addEventListener('submit', (e) => {
-      e.preventDefault();
+    function submitComment() {
       const commenter = document.getElementById('commenter').value;
       const comment = document.getElementById('comment').value;
 
       comments.push({ commenter, comment });
       displayComments();
-    });
+    }
 
     function displayComments() {
       commentsDiv.innerHTML = '';
