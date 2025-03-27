@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comment System</title>
+  <title>Test Comment</title>
 </head>
 <body>
-  <h1>Comment System</h1>
-  <div id="comments"></div>
-
   <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
   <script>
-    // Firebase configuration
+    // Your code here
     const firebaseConfig = {
       apiKey: "AIzaSyDtgzq_RQyysczMuyNsR6NyetCXzYObcbo",
       authDomain: "commenthub-32226.firebaseapp.com",
@@ -23,14 +18,11 @@
       appId: "1:1098922349007:web:6acbd0ce57d18d1d8e02ba"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
-    // Get a reference to the comments node
     const db = firebase.database();
     const commentsRef = db.ref('comments');
 
-    // Save a test comment
     commentsRef.push({
       name: 'Test User',
       comment: 'This is a test comment!'
@@ -40,21 +32,7 @@
     })
     .catch((error) => {
       console.error('Error saving test comment:', error);
-    });
-
-    // Display comments
-    commentsRef.on('value', (data) => {
-      const commentsElement = document.getElementById('comments');
-      commentsElement.innerHTML = '';
-
-      data.forEach((comment) => {
-        const commentElement = document.createElement('div');
-        commentElement.innerHTML = `
-          <h2>${comment.val().name}</h2>
-          <p>${comment.val().comment}</p>
-        `;
-        commentsElement.appendChild(commentElement);
-      });
+      alert('Error saving test comment: ' + error.message);
     });
   </script>
 </body>
