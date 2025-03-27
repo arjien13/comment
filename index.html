@@ -2,50 +2,42 @@
 <html>
 <head>
   <title>Comment Section</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    #comments {
-      margin-top: 20px;
-    }
-    .comment {
-      margin-bottom: 10px;
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
-    }
-  </style>
 </head>
 <body>
   <h1>Comment Section</h1>
-  <input type="text" id="commenter" placeholder="Name">
-  <br>
-  <textarea id="comment" placeholder="Comment"></textarea>
-  <br>
-  <button onclick="submitComment()">Submit Comment</button>
+  <form id="comment-form">
+    <label for="commenter">Name:</label>
+    <input type="text" id="commenter" name="commenter"><br><br>
+    <label for="comment">Comment:</label>
+    <textarea id="comment" name="comment"></textarea><br><br>
+    <input type="submit" value="Submit Comment">
+  </form>
   <div id="comments"></div>
 
   <script>
+    const commentForm = document.getElementById('comment-form');
     const commentsDiv = document.getElementById('comments');
-    const comments = [];
+    let comments = [];
 
-    function submitComment() {
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
       const commenter = document.getElementById('commenter').value;
       const comment = document.getElementById('comment').value;
 
       comments.push({ commenter, comment });
       displayComments();
-    }
+    });
 
     function displayComments() {
       commentsDiv.innerHTML = '';
-      comments.forEach((comment, index) => {
+      comments.forEach(comment => {
         const commentElement = document.createElement('div');
-        commentElement.classList.add('comment');
         commentElement.innerHTML = `<strong>${comment.commenter}:</strong> ${comment.comment}`;
         commentsDiv.appendChild(commentElement);
       });
     }
+
+    displayComments();
   </script>
 </body>
 </html>
