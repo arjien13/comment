@@ -1,77 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Comment Section</title>
-  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comment System</title>
 </head>
 <body>
+  <h1>Comment System</h1>
   <form id="comment-form">
-    <input type="text" id="name" placeholder="Name">
-    <textarea id="comment" placeholder="Comment"></textarea>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br><br>
+    <label for="comment">Comment:</label>
+    <textarea id="comment" name="comment"></textarea><br><br>
     <button type="submit">Submit</button>
   </form>
 
-  <div id="comments-container"></div>
-
+  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
   <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDtgzq_RQyysczMuyNsR6NyetCXzYObcbo",
-      authDomain: "commenthub-32226.firebaseapp.com",
-      databaseURL: "https://commenthub-32226-default-rtdb.firebaseio.com",
-      projectId: "commenthub-32226",
-      storageBucket: "commenthub-32226.appspot.com",
-      messagingSenderId: "1098922349007",
-      appId: "1:1098922349007:web:YOUR_APP_ID"
-    };
+    // Firebase configuration
+   const firebaseConfig = {
+  apiKey: "AIzaSyDtgzq_RQyysczMuyNsR6NyetCXzYObcbo",
+  authDomain: "commenthub-32226.firebaseapp.com",
+  databaseURL: "https://commenthub-32226-default-rtdb.firebaseio.com",
+  projectId: "commenthub-32226",
+  storageBucket: "commenthub-32226.appspot.com",
+  messagingSenderId: "1098922349007",
+  appId: "1:1098922349007:web:6acbd0ce57d18d1d8e02ba"
+};
 
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
-    // Write comment to database
+    // Get the comment form
     const commentForm = document.getElementById('comment-form');
-    const commentsContainer = document.getElementById('comments-container');
 
+    // Add an event listener to the form
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('name').value;
       const comment = document.getElementById('comment').value;
 
       const db = firebase.database();
-      db.ref('Comment Section').set({
+      const commentsRef = db.ref('comments');
+
+      commentsRef.push({
         name: name,
         comment: comment
-      }, (error) => {
-        if (error) {
-          console.error('Error saving comment:', error);
-          alert('Error saving comment: ' + error.message);
-        } else {
-          console.log('Comment saved successfully!');
-          alert('Comment saved successfully!');
-        }
       });
-
-      // Clear form fields
-      document.getElementById('name').value = '';
-      document.getElementById('comment').value = '';
-    });
-
-    // Display comment from database
-    const db = firebase.database();
-    db.ref('Comment Section').on('value', (data) => {
-      const comment = data.val();
-      if (comment) {
-        const commentHTML = `
-          <div class="comment">
-            <span class="comment-name">${comment.name}</span>
-            <p class="comment-text">${comment.comment}</p>
-          </div>
-        `;
-
-        commentsContainer.innerHTML = commentHTML;
-      } else {
-        console.log('No comment data available.');
-        commentsContainer.innerHTML = '<p>No comments available.</p>';
-      }
     });
   </script>
 </body>
