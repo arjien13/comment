@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Comment Section</title>
+</head>
+<body>
+  <h1>Comment Section</h1>
+  <form id="comment-form">
+    <label for="commenter">Name:</label>
+    <input type="text" id="commenter" name="commenter"><br><br>
+    <label for="comment">Comment:</label>
+    <textarea id="comment" name="comment"></textarea><br><br>
+    <input type="submit" value="Submit Comment">
+  </form>
+  <div id="comments"></div>
+
+  <script>
+    const commentForm = document.getElementById('comment-form');
+    const commentsDiv = document.getElementById('comments');
+
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const commenter = document.getElementById('commenter').value;
+      const comment = document.getElementById('comment').value;
+
+      fetch('/submit-comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ commenter, comment }),
+      })
+        .then(() => {
+          fetch('/comments')
+            .then(response => response.json())
+            .then(comments => {
+              commentsDiv.innerHTML = '';
+              comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.innerHTML = `<strong>${comment.commenter}:</strong> ${comment.comment}`;
+                commentsDiv.appendChild(commentElement);
+              });
+            });
+        });
+    });
+
+    fetch('/comments')
+      .then(response => response.json())
+      .then(comments => {
+        comments.forEach(comment => {
+          const commentElement = document.createElement('div');
+          commentElement.innerHTML = `<strong>${comment.commenter}:</strong> ${comment.comment}`;
+          commentsDiv.appendChild(commentElement);
+        });
+      });
+  </script>
+</body>
+</html>
