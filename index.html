@@ -1,39 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Test Comment</title>
-</head>
-<body>
-  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
-  <script>
-    // Your code here
-    const firebaseConfig = {
-      apiKey: "AIzaSyDtgzq_RQyysczMuyNsR6NyetCXzYObcbo",
-      authDomain: "commenthub-32226.firebaseapp.com",
-      databaseURL: "https://commenthub-32226-default-rtdb.firebaseio.com",
-      projectId: "commenthub-32226",
-      storageBucket: "commenthub-32226.appspot.com",
-      messagingSenderId: "1098922349007",
-      appId: "1:1098922349007:web:6acbd0ce57d18d1d8e02ba"
-    };
+<script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
 
-    firebase.initializeApp(firebaseConfig);
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdHd7u4Z6oWv5tXV3u0a5Wv5tXV3u0",
+    authDomain: "test-12345.firebaseapp.com",
+    databaseURL: "https://test-12345-default-rtdb.firebaseio.com",
+    projectId: "test-12345",
+    storageBucket: "test-12345.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:123456789"
+  };
 
-    const db = firebase.database();
-    const commentsRef = db.ref('comments');
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-    commentsRef.push({
-      name: 'Test User',
-      comment: 'This is a test comment!'
-    })
-    .then(() => {
-      console.log('Test comment saved!');
-    })
-    .catch((error) => {
-      console.error('Error saving test comment:', error);
-      alert('Error saving test comment: ' + error.message);
-    });
-  </script>
-</body>
-</html>
+  const commentsRef = firebase.database().ref('comments');
+
+  commentsRef.push({
+    name: 'Test User',
+    comment: 'This is a test comment!'
+  });
+</script>
