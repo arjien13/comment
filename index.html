@@ -18,17 +18,14 @@
 </head>
 <body>
   <h1>Comment Section</h1>
-  <form id="comment-form">
-    <label for="commenter">Name:</label>
-    <input type="text" id="commenter" name="commenter"><br><br>
-    <label for="comment">Comment:</label>
-    <textarea id="comment" name="comment"></textarea><br><br>
-    <input type="button" value="Submit Comment" onclick="submitComment()">
-  </form>
+  <input type="text" id="commenter" placeholder="Name">
+  <br>
+  <textarea id="comment" placeholder="Comment"></textarea>
+  <br>
+  <button onclick="submitComment()">Submit Comment</button>
   <div id="comments"></div>
 
   <script>
-    const commentForm = document.getElementById('comment-form');
     const commentsDiv = document.getElementById('comments');
     const comments = [];
 
