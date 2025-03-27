@@ -17,14 +17,14 @@
 
   const commentsRef = firebase.database().ref('comments');
 
-  commentsRef.set({
+  commentsRef.update({
     name: 'Test User',
     comment: 'This is a test comment!'
   })
   .then(() => {
-    console.log('Data set successfully!');
+    console.log('Data updated successfully!');
   })
   .catch((error) => {
-    console.error('Error setting data:', error);
+    console.error('Error updating data:', error);
   });
 </script>
