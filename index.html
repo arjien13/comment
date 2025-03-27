@@ -1,120 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CommentHub</title>
-    <style>
-        /* Add some basic styling to make the comment section look decent */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-        }
-        
-        .comment-section {
-            width: 500px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        
-        .comment-input {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-        }
-        
-        .comment-btn {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .comment-btn:hover {
-            background-color: #3e8e41;
-        }
-        
-        .comment-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            text-align: left;
-        }
-        
-        .comment-item {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-        
-        .comment-item:last-child {
-            border-bottom: none;
-        }
-    </style>
+  <title>Comment Section</title>
+  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase.js"></script>
 </head>
 <body>
-    <div class="comment-section">
-        <h2>Comment Section</h2>
-        <input type="text" id="comment-input" class="comment-input" placeholder="Write a comment...">
-        <button id="comment-btn" class="comment-btn">Post Comment</button>
-        <ul id="comment-list" class="comment-list"></ul>
-    </div>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
-    <script>
-        // Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDtgzq_RQyysczMuyNsR6NyetCXzYObcbo",
-            authDomain: "commenthub-32226.firebaseapp.com",
-            projectId: "commenthub-32226",
-            storageBucket: "commenthub-32226.appspot.com",
-            messagingSenderId: "1098922349007"
-        };
-        
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        
-        // Get the comment input, button, and list elements
-        const commentInput = document.getElementById('comment-input');
-        const commentBtn = document.getElementById('comment-btn');
-        const commentList = document.getElementById('comment-list');
-        
-        // Load comments from the Firestore database
-        db.collection('comments').onSnapshot((querySnapshot) => {
-            commentList.innerHTML = '';
-            querySnapshot.forEach((doc) => {
-                const commentItem = document.createElement('li');
-                commentItem.classList.add('comment-item');
-                commentItem.textContent = doc.data().text;
-                commentList.appendChild(commentItem);
-            });
-        });
-        
-        // Add an event listener to the comment button
-        commentBtn.addEventListener('click', () => {
-            const commentText = commentInput.value.trim();
-            if (commentText) {
-                // Save the comment to the Firestore database
-                db.collection('comments').add({
-                    text: commentText
-                })
-                .then(() => {
-                    console.log('Comment added successfully!');
-                    commentInput.value = '';
-                })
-                .catch((error) => {
-                    console.error('Error adding comment:', error);
-                });
-            }
-        });
-    </script>
+  <form id="comment-form">
+    <input type="text" id="name" placeholder="Name">
+    <textarea id="comment" placeholder="Comment"></textarea>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="comments-container"></div>
+
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDtgzq_RQyysczMuyNsR6NyetCXzYObcbo",
+      authDomain: "commenthub-32226.firebaseapp.com",
+      databaseURL: "https://commenthub-32226-default-rtdb.firebaseio.com",
+      projectId: "commenthub-32226",
+      storageBucket: "commenthub-32226.appspot.com",
+      messagingSenderId: "1098922349007",
+      appId: "1:1098922349007:web:YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Write comment to database
+    const commentForm = document.getElementById('comment-form');
+    const commentsContainer = document.getElementById('comments-container');
+
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const comment = document.getElementById('comment').value;
+
+      const db = firebase.database();
+      db.ref('Comment Section').set({
+        name: name,
+        comment: comment
+      });
+
+      // Clear form fields
+      document.getElementById('name').value = '';
+      document.getElementById('comment').value = '';
+    });
+
+    // Display comment from database
+    const db = firebase.database();
+    db.ref('Comment Section').on('value', (data) => {
+      const comment = data.val();
+      const commentHTML = `
+        <div class="comment">
+          <span class="comment-name">${comment.name}</span>
+          <p class="comment-text">${comment.comment}</p>
+        </div>
+      `;
+
+      commentsContainer.innerHTML = commentHTML;
+    });
+  </script>
 </body>
 </html>
