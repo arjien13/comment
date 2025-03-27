@@ -36,19 +36,30 @@
     const commentForm = document.getElementById('comment-form');
 
     // Add an event listener to the form
-    commentForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const comment = document.getElementById('comment').value;
+     commentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('Form submitted!');
 
-      const db = firebase.database();
-      const commentsRef = db.ref('comments');
+    const name = document.getElementById('name').value;
+    const comment = document.getElementById('comment').value;
 
-      commentsRef.push({
-        name: name,
-        comment: comment
-      });
+    console.log('Name:', name);
+    console.log('Comment:', comment);
+
+    const db = firebase.database();
+    const commentsRef = db.ref('comments');
+
+    commentsRef.push({
+      name: name,
+      comment: comment
+    })
+    .then(() => {
+      console.log('Comment saved!');
+    })
+    .catch((error) => {
+      console.error('Error saving comment:', error);
     });
-  </script>
+  });
+</script>
 </body>
 </html>
