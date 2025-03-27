@@ -20,11 +20,11 @@
   commentsRef.push({
     name: 'Test User',
     comment: 'This is a test comment!'
-  }, (error) => {
-    if (error) {
-      console.error('Error pushing data:', error);
-    } else {
-      console.log('Data pushed successfully!');
-    }
+  })
+  .then(() => {
+    console.log('Data pushed successfully!');
+  })
+  .catch((error) => {
+    console.error('Error pushing data:', error);
   });
 </script>
