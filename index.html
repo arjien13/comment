@@ -6,16 +6,6 @@
   <title>Comment System</title>
 </head>
 <body>
-  <h1>Comment System</h1>
-  <form id="comment-form">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name"><br><br>
-    <label for="comment">Comment:</label>
-    <textarea id="comment" name="comment"></textarea><br><br>
-    <button type="submit">Submit</button>
-  </form>
-  <div id="comments"></div>
-
   <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
   <script>
@@ -33,55 +23,20 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
-    // Get the comment form
-    const commentForm = document.getElementById('comment-form');
-    const commentsElement = document.getElementById('comments');
+    // Get a reference to the comments node
+    const db = firebase.database();
+    const commentsRef = db.ref('comments');
 
-    // Add an event listener to the form
-    commentForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      console.log('Form submitted!');
-
-      const nameInput = document.getElementById('name');
-      const commentInput = document.getElementById('comment');
-
-      const name = nameInput.value.trim();
-      const comment = commentInput.value.trim();
-
-      console.log('Name:', name);
-      console.log('Comment:', comment);
-
-      const db = firebase.database();
-      const commentsRef = db.ref('comments');
-
-      commentsRef.push({
-        name: name,
-        comment: comment
-      })
-      .then(() => {
-        console.log('Comment saved!');
-        alert('Comment saved successfully!');
-        nameInput.value = '';
-        commentInput.value = '';
-      })
-      .catch((error) => {
-        console.error('Error saving comment:', error);
-      });
-    });
-
-    // Display saved comments
-    const commentsRef = firebase.database().ref('comments');
-    commentsRef.on('value', (data) => {
-      commentsElement.innerHTML = '';
-
-      data.forEach((comment) => {
-        const commentElement = document.createElement('div');
-        commentElement.innerHTML = `
-          <h2>${comment.val().name}</h2>
-          <p>${comment.val().comment}</p>
-        `;
-        commentsElement.appendChild(commentElement);
-      });
+    // Save a test comment
+    commentsRef.push({
+      name: 'Test User',
+      comment: 'This is a test comment!'
+    })
+    .then(() => {
+      console.log('Test comment saved!');
+    })
+    .catch((error) => {
+      console.error('Error saving test comment:', error);
     });
   </script>
 </body>
