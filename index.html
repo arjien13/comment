@@ -40,6 +40,14 @@
       db.ref('Comment Section').set({
         name: name,
         comment: comment
+      }, (error) => {
+        if (error) {
+          console.error('Error saving comment:', error);
+          alert('Error saving comment: ' + error.message);
+        } else {
+          console.log('Comment saved successfully!');
+          alert('Comment saved successfully!');
+        }
       });
 
       // Clear form fields
@@ -51,14 +59,19 @@
     const db = firebase.database();
     db.ref('Comment Section').on('value', (data) => {
       const comment = data.val();
-      const commentHTML = `
-        <div class="comment">
-          <span class="comment-name">${comment.name}</span>
-          <p class="comment-text">${comment.comment}</p>
-        </div>
-      `;
+      if (comment) {
+        const commentHTML = `
+          <div class="comment">
+            <span class="comment-name">${comment.name}</span>
+            <p class="comment-text">${comment.comment}</p>
+          </div>
+        `;
 
-      commentsContainer.innerHTML = commentHTML;
+        commentsContainer.innerHTML = commentHTML;
+      } else {
+        console.log('No comment data available.');
+        commentsContainer.innerHTML = '<p>No comments available.</p>';
+      }
     });
   </script>
 </body>
